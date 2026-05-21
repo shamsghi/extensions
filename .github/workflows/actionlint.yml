@@ -14,16 +14,12 @@ jobs:
   actionlint:
     runs-on: namespace-profile-2x4-ubuntu-2404
     if: github.repository_owner == 'zed-industries'
+    permissions:
+      contents: read
     env:
-      SHA: 03d0035246f3e81f36aed592ffb4bebf33a03106
       VERSION: 1.7.7
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-      - name: Download actionlint
-        id: get_actionlint
-        run: |
-          bash <(curl "https://raw.githubusercontent.com/rhysd/actionlint/${{ env.SHA }}/scripts/download-actionlint.bash") "${{ env.VERSION }}"
-        shell: bash
       - name: Check workflow files
-        run: ${{ steps.get_actionlint.outputs.executable }} -color
+        run: go run github.com/rhysd/actionlint/cmd/actionlint@v${{ env.VERSION }} -color
         shell: bash
